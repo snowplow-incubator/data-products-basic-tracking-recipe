@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Todo } from "../../../types";
+import { createTodo, trackCompleteTodoSpec } from "../../../tracking/snowplow";
 
 type ItemProps = {
   item: Todo;
@@ -40,6 +41,12 @@ function Item({ item, update }: ItemProps) {
   }
 
   function onChangeForCompleted() {
+    if (!item.completed) {
+      trackCompleteTodoSpec({
+        action: "complete",
+        context: [createTodo({ title: item.value })],
+      });
+    }
     update({ ...item, completed: !item.completed });
   }
 

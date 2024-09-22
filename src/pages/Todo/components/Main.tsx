@@ -1,5 +1,6 @@
 import { FilterType, Todo } from "../../../types";
 import Item from "./Item";
+import { trackRemoveTodoSpec } from "../../../tracking/snowplow";
 
 type MainProps = {
   todos: Todo[];
@@ -13,6 +14,7 @@ function Main({ todos, updateTodos, filter }: MainProps) {
       updateTodos((prev) => {
         return prev.filter((item) => item.id !== updatedItem.id);
       });
+      trackRemoveTodoSpec({ action: "remove" })
       return;
     }
     updateTodos((prev) => {

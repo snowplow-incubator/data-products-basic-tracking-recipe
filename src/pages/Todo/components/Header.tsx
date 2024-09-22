@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { v4 } from "uuid";
 import { Todo } from "../../../types";
+import { createTodo, trackAddTodoSpec } from "../../../tracking/snowplow";
 
 type HeaderProps = {
   addTodo: React.Dispatch<React.SetStateAction<Todo[]>>;
@@ -24,6 +25,10 @@ function Header({ addTodo }: HeaderProps) {
           },
           ...preItems,
         ];
+      });
+      trackAddTodoSpec({
+        action: "add",
+        context: [createTodo({ title: value })],
       });
       setValue("");
     }
